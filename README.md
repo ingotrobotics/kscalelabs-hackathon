@@ -27,3 +27,18 @@ Below is the command to launch the container build above:
 docker run -it -v /var/run/docker.sock:/var/run/docker.sock kos:latest
 ```
 Once running, you can execute all of the `cargo` commands found in the [kos README](https://github.com/kscalelabs/kos/blob/master/README.md). `cross` commands have an issue with running from the existing container, though those are being worked on.
+
+
+# K-Scale Sim
+The K-Scale Sim (sim) tools use IsaacGym to train humanoid robots. To build this container, user the `kscale-sim.dockerfile`.
+
+### Build
+```
+DOCKER_BUILDKIT=1 docker build -t kscale-sim:latest -f kscale-sim.dockerfile .
+```
+
+### Run
+```
+docker run -it --rm --runtime=nvidia --gpus all -v /tmp/.X11-unix:/tmp/.X11-unix -v ${HOME}/.Xauthority:/root/.Xauthority -e DISPLAY=$DISPLAY kscale-sim:latest
+```
+There are currently some issues with running the simulator. Some of the python errors can be resolved with `export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH`, but this then causes issues with other executables, namely g++.
